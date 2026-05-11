@@ -37,6 +37,12 @@ docker compose -f docker-compose.prod.yml up --build
 ```
 En production, seul le port 80 est exposé publiquement.
 
+## Initialisation des données (Seeding)
+Pour peupler la base de données avec des données de test ou pour réinitialiser l'inventaire, exécutez la commande suivante pendant que les conteneurs sont actifs :
+```bash
+docker exec -i bijouterie_db mongosh < scripts/seed.js
+```
+
 ## Variables d’environnement
 Un fichier .env est requis à la racine (voir .env.example).
 
