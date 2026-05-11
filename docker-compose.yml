@@ -1,0 +1,47 @@
+services:
+  # Le service de base de données 
+  database:
+    image: mongo:8
+    container_name: bijouterie_db
+    volumes:
+      - database_data:/data/db
+      - ./scripts/seed.js:/docker-entrypoint-initdb.d/seed.js:ro
+
+  # Service API de bijouterie
+  api:
+    build: ./api
+    container_name: bijouterie_api
+    environment:
+      - MONGO_URL=mongodb://database:27017/bijouterie
+    depends_on:
+      - database
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+
+  # Service Frontend
+  client:
+    build: ./client
+    container_name: bijouterie_client
+    environment:
+      - VITE_API_URL=/api
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    depends_on:
+      - api
+
+  # ÉTAPE 5 : Le Reverse Proxy (Nginx)
+  gateway:
+    build: ./nginx  
+    container_name: bijouterie_gateway
+    ports:
+      - "80:80"
+    depends_on:
+      - client
+      - api
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+
+volumes:
+  database_data:

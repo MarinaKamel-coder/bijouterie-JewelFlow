@@ -1,0 +1,24 @@
+# Dépendances locales (ne jamais copier celles de ton Windows/Mac)
+**/node_modules
+**/dist
+**/build
+
+# Fichiers d'environnement et secrets
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+
+# Logs
+**/*.log
+npm-debug.log*
+
+# Fichiers système et éditeurs
+.DS_Store
+.vscode
+.idea
+.dockerignore
+README.md

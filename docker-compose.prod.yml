@@ -1,0 +1,30 @@
+services:
+  database:
+    image: mongo:8
+    container_name: bijouterie_db_prod
+    restart: always
+    volumes:
+      - database_data:/data/db
+
+  api:
+    image: marinakamel/bijouterie-api:v2.0 
+    container_name: bijouterie_api_prod
+    restart: always
+    environment:
+      - MONGO_URL=mongodb://database:27017/bijouterie
+    depends_on:
+      - database
+
+  gateway:
+    image: marinakamel/bijouterie-client:v2.0 
+    container_name: bijouterie_prod
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+      - database
+      
+volumes:
+  database_data:
+    external: true 
